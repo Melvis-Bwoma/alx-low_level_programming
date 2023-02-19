@@ -2,6 +2,8 @@
 
 /**
  * main - main entry point
+ * 
+ * Description: Correction of numbers 
  *
  * Return - always 0
  */
