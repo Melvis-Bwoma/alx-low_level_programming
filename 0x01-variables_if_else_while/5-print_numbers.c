@@ -1,8 +1,7 @@
 #include <stdio.h>
 
 /**
- *
- * main - function
+ * main - print out single digit numbers
  *
  * Return: Always 0 (Success)
  */
