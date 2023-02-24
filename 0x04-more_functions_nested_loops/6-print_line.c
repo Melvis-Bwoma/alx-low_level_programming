@@ -1,17 +1,25 @@
 #include "main.h"
 
 /**
- *main - check the code
- *
- *Return: ALways 0.
+ * print_line - draws a straight line accordint to parameter
+ * @n: the number of lines to draw
+ * Return: empty
  */
 
-int main(void)
-{
-	print_line(0);
-	print_line(2);
-	print_line(10);
-	print_line(-4);
-	return (0);
-}
+void print_line(int n)
 
+{
+int x;
+if (n <= 0)
+{
+_putchar('\n');
+}
+else
+{
+for (x = 0; x < n; x++)
+{
+_putchar(95);
+}
+_putchar('\n');
+}
+}
