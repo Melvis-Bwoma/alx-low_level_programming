@@ -1,50 +1,75 @@
+#include "main.h"
 #include <stdlib.h>
-
 /**
- * count_words - Counts words in a string based on spaces.
- * @str: The string whose the words will be counted.
- * Return: The number of words of the string if it has some.
- *	   0 otherwise.
- */
-int count_words(char *str)
+* wordCounterRec - count num of words recursively
+* @str: pointer to char
+* @i: current index
+* Return: number of words
+**/
+int wordCounterRec(char *str, int i)
 {
-	int i = 0, n = 0;
-
-	for (i = 0; str[i] != '\0'; i++)
-		if (str[i] == 32)
-			n++;
-	return (n);
+	if (str[i] == '\0')
+		return (0);
+	if (str[i] == ' ' && str[i + 1] != ' ' && str[i + 1] != '\0')
+		return (1 + wordCounterRec(str, i + 1));
+	return (wordCounterRec(str, i + 1));
 }
 /**
- * strtow - Splits a string into words.
- * @str: The string to split.
- * Return: An array of string which the last item is NULL
- *	   if everthing runs well.
- *	  NULL if str == NULL or str = "".
- */
+* word_counter - counts number of words in 1d array of strings
+* @str: pointer to char
+* Return: number of words
+**/
+int word_counter(char *str)
+{
+	if (str[0] != ' ')
+		return (1 + wordCounterRec(str, 0));
+	return (wordCounterRec(str, 0));
+}
+/**
+* strtow - splits a string into words.
+* @str: string to be splitted
+* Return: pointer to an array of strings (words) or null
+**/
 char **strtow(char *str)
 {
-	int i = 0, j = 0, k = 0, n = 0;
-	char **res;
+	char **strDup;
+	int i, n, m, words;
 
-	n = count_words(str);
-	res = malloc(n * sizeof(char *));
-	if (res != NULL)
+	if (str == NULL || str[0] == 0)
+		return (NULL);
+	words = word_counter(str);
+	if (words < 1)
+		return (NULL);
+	strDup = malloc(sizeof(char *) * (words + 1));
+	if (strDup == NULL)
+		return (NULL);
+	i = 0;
+	while (i < words && *str != '\0')
 	{
-		for (i = 0; i < n; i++)
+		if (*str != ' ')
 		{
 			n = 0;
-			while (str[j++] != 32)
+			while (str[n] != ' ')
 				n++;
-			j++;
-			res[i] = malloc((n + 1) * sizeof(char));
-			if (res[i] != NULL)
+			strDup[i] = malloc(sizeof(char) * (n + 1));
+			if (strDup[i] == NULL)
 			{
-				for (k = 0; k < n; k++)
-					res[i][k] = str[j - n - 1 + k];
-				res[i][k] = '\0';
+				while (--i >= 0)
+					free(strDup[--i]);
+				free(strDup);
+				return (NULL);
 			}
+			m = 0;
+			while (m < n)
+			{
+				strDup[i][m] = *str;
+				m++, str++;
+			}
+			strDup[i][m] = '\0';
+			i++;
 		}
+		str++;
 	}
-	return (res);
+	strDup[i] = '\0';
+	return (strDup);
 }
