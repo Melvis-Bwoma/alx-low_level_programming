@@ -1,18 +1,22 @@
-#include <stdio.h>
-#include "variadic_functions.h"
-
+#ifndef VARIADIC_FUNCTIONS_H
+#define VARIADIC_FUNCTIONS_H
 /**
- * main - check the code
+ * struct fmt - Struct ftm
  *
- * Return: Always 0.
+ * @m: The format
+ * @fun: The function associated
  */
-int main(void)
+typedef struct fmt
 {
-    int sum;
+	char *m;
+	void (*fun)();
+} fmt;
 
-    sum = sum_them_all(2, 98, 1024);
-    printf("%d\n", sum);
-    sum = sum_them_all(4, 98, 1024, 402, -1024);
-    printf("%d\n", sum);    
-    return (0);
-}
+int _putchar(char c);
+int sum_them_all(const unsigned int n, ...);
+void print_numbers(const char *separator, const unsigned int n, ...);
+void print_strings(const char *separator, const unsigned int n, ...);
+void print_all(const char * const format, ...);
+
+
+#endif /* VARIADIC_FUNCTIONS_H */
