@@ -1,89 +1,92 @@
-#include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "variadic_functions.h"
-/**
- * p_char - print a character
- * @pr: list of paramethers
- *
- * Return: void
- */
-void p_char(va_list pr)
-{
-	printf("%c", (char) va_arg(pr, int));
-}
-/**
- * p_int - print a integer
- * @pr: list of paramethers
- *
- * Return: void
- */
-void p_int(va_list pr)
-{
-	printf("%d", va_arg(pr, int));
-}
-/**
- * p_str - print a string
- * @pr: list of paramethers
- *
- * Return: void
- */
-void p_str(va_list pr)
-{
-	char *str;
 
-	str = va_arg(pr, char*);
-	if (str == '\0')
-
-		str = "(nil)";
-	printf("%s", str);
-}
 /**
- * p_float - print a float
- * @pr: list of paramethers
- *
- * Return: void
+ *func_char - print type char.
+ *@valist: is a arg type char.
+ *Return: void
  */
-void p_float(va_list pr)
+void func_char(va_list valist)
 {
-	printf("%f", va_arg(pr, double));
+	printf("%c", (char)va_arg(valist, int));
 }
+
 /**
- *print_all - function that prints anything.
- *@format: is list of types of arguments passed to the function
- *
- * Return: Always 0 (Success)
+ *func_int - print type int.
+ *@valist: is a arg type int.
+ *Return: void
+ */
+void func_int(va_list valist)
+{
+	printf("%i", va_arg(valist, int));
+}
+
+/**
+ *func_float - print type float.
+ *@valist: is a arg type float.
+ *Return: void
+ */
+void func_float(va_list valist)
+{
+	printf("%f", (float)va_arg(valist, double));
+}
+
+/**
+ *func_string - print type string.
+ *@valist: is a arg type string
+ *Return: void
+ */
+void func_string(va_list valist)
+{
+	char *ptr = va_arg(valist, char *);
+
+	if (ptr == NULL)
+	{
+		printf("(nil)");
+		return;
+	}
+
+	printf("%s", ptr);
+}
+
+
+/**
+ *print_all - prints anything
+ *@format: is a list of types of arguments passed to the function
+ *Return: void
  */
 void print_all(const char * const format, ...)
 {
-	fmt format_s[] = {
-		{"c", p_char},
-		{"i", p_int},
-		{"s", p_str},
-		{"f", p_float},
-		{NULL, NULL}
-	};
-	int i, j;
-	va_list lp;
-	char *voidstr = "";
-	char *space = ", ";
+	va_list valist;
+	int i = 0, j = 0;
+	char *sp = "";
+	formate formates[] = {
+		{"c", func_char},
+		{"i", func_int},
+		{"f", func_float},
+		{"s", func_string},
+		{NULL, NULL}};
 
-	va_start(lp, format);
-	i = 0;
-	while (format != '\0' && format[i] != '\0')
+	va_start(valist, format);
+
+	while (format && format[i])
 	{
 		j = 0;
-		while (format_s[j].m != '\0')
+		while (formates[j].index)
 		{
-			if (format[i] == format_s[j].m[0])
+			if (*formates[j].index == format[i])
 			{
-				printf("%s", voidstr);
-				format_s[j].fun(lp);
-				voidstr = space;
+				printf("%s", sp);
+				formates[j].func(valist);
+				sp = ", ";
+
 			}
 			j++;
 		}
 		i++;
 	}
+
 	printf("\n");
-	va_end(lp);
+	va_end(valist);
 }
