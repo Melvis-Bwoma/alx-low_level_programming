@@ -1,101 +1,89 @@
+#include <stdarg.h>
+#include <stdio.h>
 #include "variadic_functions.h"
 /**
- * integer_print - print integers.
- * (* a blank line
- * *@args: the list of parameters
- * Description: this function prints integers)?
- * (* section header: the header of this function is variadic_functions.h)*
- * Return:no return a void func.
+ * p_char - print a character
+ * @pr: list of paramethers
+ *
+ * Return: void
  */
-void integer_print(va_list args)
+void p_char(va_list pr)
 {
-	printf("%d", va_arg(args, int));
+	printf("%c", (char) va_arg(pr, int));
 }
 /**
- * char_print - print chars.
- * (* a blank line
- * *@args: the list of parameters
- * Description: this function prints chars)?
- * (* section header: the header of this function is variadic_functions.h)*
- * Return:no return a void func.
+ * p_int - print a integer
+ * @pr: list of paramethers
+ *
+ * Return: void
  */
-void char_print(va_list args)
+void p_int(va_list pr)
 {
-	printf("%c", va_arg(args, int));
+	printf("%d", va_arg(pr, int));
 }
 /**
- * string_print - print strings
- * (* a blank line
- * *@args: the list of parameters
- * Description: this function prints strings)?
- * (* section header: the header of this function is variadic_functions.h)*
- * Return:no return a void func.
+ * p_str - print a string
+ * @pr: list of paramethers
+ *
+ * Return: void
  */
-
-void string_print(va_list args)
+void p_str(va_list pr)
 {
-	char *s;
+	char *str;
 
-	s = va_arg(args, char *);
-	if (s == NULL)
-		s = "(nil)";
-	printf("%s", s);
-}
+	str = va_arg(pr, char*);
+	if (str == '\0')
 
-/**
- * float_print - print floats.
- * (* a blank line
- * *@args: the list of parameters
- * Description: this function prints floats)?
- * (* section header: the header of this function is variadic_functions.h)*
- * Return:no return a void func.
- */
-void float_print(va_list args)
-{
-	printf("%f", va_arg(args, double));
+		str = "(nil)";
+	printf("%s", str);
 }
 /**
- * print_all - print anything.
- * (* a blank line
- * *@format: the paramaters
- * Description: this function prints anything)?
- * (* section header: the header of this function is variadic_functions.h)*
- * Return: this function no return
+ * p_float - print a float
+ * @pr: list of paramethers
+ *
+ * Return: void
  */
-
+void p_float(va_list pr)
+{
+	printf("%f", va_arg(pr, double));
+}
+/**
+ *print_all - function that prints anything.
+ *@format: is list of types of arguments passed to the function
+ *
+ * Return: Always 0 (Success)
+ */
 void print_all(const char * const format, ...)
 {
-	va_list args;
-	int i, j;
-	char *separator;
-	args_t arguments[] = {
-		{"c", char_print},
-		{"i", integer_print},
-		{"f", float_print},
-		{"s", string_print},
+	fmt format_s[] = {
+		{"c", p_char},
+		{"i", p_int},
+		{"s", p_str},
+		{"f", p_float},
 		{NULL, NULL}
 	};
+	int i, j;
+	va_list lp;
+	char *voidstr = "";
+	char *space = ", ";
 
-	va_start(args, format);
+	va_start(lp, format);
 	i = 0;
-	separator = "";
-
-	while (format != NULL && *(format + i) != '\0')
+	while (format != '\0' && format[i] != '\0')
 	{
 		j = 0;
-		while (j < 4)
+		while (format_s[j].m != '\0')
 		{
-			if (*(format + i) == *(arguments[j]).format)
+			if (format[i] == format_s[j].m[0])
 			{
-				printf("%s", separator);
-				arguments[j].function(args);
-				separator = ", ";
-
+				printf("%s", voidstr);
+				format_s[j].fun(lp);
+				voidstr = space;
 			}
 			j++;
 		}
 		i++;
 	}
 	printf("\n");
-	va_end(args);
+	va_end(lp);
 }
